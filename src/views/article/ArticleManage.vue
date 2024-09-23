@@ -145,7 +145,12 @@ const onAddArticle = () => {
       style="margin-top: 20px; justify-content: flex-end"
     />
     <!-- 抽屉 -->
-    <el-drawer v-model="visibleDrawer" title="大标题">
+    <el-drawer
+      v-model="visibleDrawer"
+      title="大标题"
+      size="50%"
+      direction="rtl"
+    >
       <span>Hi</span>
     </el-drawer>
   </page-container>
