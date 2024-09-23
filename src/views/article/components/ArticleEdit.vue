@@ -22,11 +22,12 @@ const formModel = ref({
   ...defaultForm
 })
 
-// 图片上传地址
+// 图片上传逻辑
 const imageUrl = ref('')
-
 const onselectFile = (uploadFile) => {
   imageUrl.value = URL.createObjectURL(uploadFile.raw)
+  // 立刻将图片对象，存入 formModel.value.cover_img 将来用于提交
+  formModel.value.cover_img = uploadFile.raw
 }
 
 const editorRef = ref()
