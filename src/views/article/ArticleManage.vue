@@ -4,6 +4,7 @@ import { Edit, Delete } from '@element-plus/icons-vue'
 import ChannelSelect from './components/ChannelSelect.vue'
 import { artGetListService } from '@/api/article.js'
 import { formatTime } from '@/utils/format.js'
+import ArticleEdit from './components/ArticleEdit.vue'
 
 // 文章列表
 const articleList = ref([])
@@ -44,11 +45,6 @@ const handleCurrentChange = (page) => {
   getArticleList()
 }
 
-// 编辑逻辑
-const onEditArticle = (row) => {
-  console.log(row)
-}
-
 // 删除逻辑
 const onDeleteArticle = (row) => {
   console.log(row)
@@ -68,12 +64,16 @@ const onReset = () => {
   getArticleList()
 }
 
-// 控制抽屉显示隐藏
-const visibleDrawer = ref(false)
+const articleEditRef = ref()
 
 // 添加逻辑
 const onAddArticle = () => {
-  visibleDrawer.value = true
+  articleEditRef.value.open({})
+}
+
+// 编辑逻辑
+const onEditArticle = (row) => {
+  articleEditRef.value.open(row)
 }
 </script>
 
@@ -113,7 +113,7 @@ const onAddArticle = () => {
         </template>
       </el-table-column>
       <el-table-column label="状态" prop="state"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" @click="onEditArticle()">
         <template #default="{ row }">
           <el-button
             circle
@@ -145,14 +145,7 @@ const onAddArticle = () => {
       style="margin-top: 20px; justify-content: flex-end"
     />
     <!-- 抽屉 -->
-    <el-drawer
-      v-model="visibleDrawer"
-      title="大标题"
-      size="50%"
-      direction="rtl"
-    >
-      <span>Hi</span>
-    </el-drawer>
+    <article-edit ref="articleEditRef"></article-edit>
   </page-container>
 </template>
 
