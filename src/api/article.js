@@ -13,3 +13,5 @@ export const artDelChannelService = (id) =>
 // 文章：获取文章列表
 export const artGetListService = (params) =>
   request.get('/my/article/list', { params })
+// 文章：添加文章
+export const artPublishService = (data) => request.post('/my/article/add', data)
