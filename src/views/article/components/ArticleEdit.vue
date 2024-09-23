@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue'
 import ChannelSelect from './ChannelSelect.vue'
+import { Plus } from '@element-plus/icons-vue'
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 // 控制抽屉显示隐藏
 const visibleDrawer = ref(false)
 
@@ -17,6 +20,13 @@ const defaultForm = {
 const formModel = ref({
   ...defaultForm
 })
+
+// 图片上传地址
+const imageUrl = ref('')
+
+const onselectFile = (uploadFile) => {
+  imageUrl.value = URL.createObjectURL(uploadFile.raw)
+}
 
 const open = (row) => {
   visibleDrawer.value = true // 显示抽屉
@@ -54,9 +64,26 @@ defineExpose({
           width="100%"
         ></channel-select>
       </el-form-item>
-      <el-form-item label="文章封面" prop="cover_img"> 文件上传 </el-form-item>
+      <el-form-item label="文章封面" prop="cover_img">
+        <el-upload
+          class="avatar-uploader"
+          :show-file-list="false"
+          :auto-upload="false"
+          :on-change="onselectFile"
+        >
+          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+          <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+        </el-upload>
+      </el-form-item>
       <el-form-item label="文章内容" prop="content">
-        <div class="editor">富文本编辑器</div>
+        <div class="editor">
+          <quill-editor
+            theme="snow"
+            v-model:content="formModel.content"
+            contentType="html"
+          >
+          </quill-editor>
+        </div>
       </el-form-item>
       <el-form-item>
         <el-button type="primary">发布</el-button>
@@ -65,3 +92,40 @@ defineExpose({
     </el-form>
   </el-drawer>
 </template>
+
+<style lang="scss" scoped>
+.avatar-uploader {
+  :deep() {
+    .avatar {
+      width: 178px;
+      height: 178px;
+      display: block;
+    }
+    .el-upload {
+      border: 1px dashed var(--el-border-color);
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: var(--el-transition-duration-fast);
+    }
+    .el-upload:hover {
+      border-color: var(--el-color-primary);
+    }
+    .el-icon.avatar-uploader-icon {
+      font-size: 28px;
+      color: #8c939d;
+      width: 178px;
+      height: 178px;
+      text-align: center;
+    }
+  }
+}
+
+.editor {
+  width: 100%;
+  :deep(.ql-editor) {
+    min-height: 200px;
+  }
+}
+</style>
