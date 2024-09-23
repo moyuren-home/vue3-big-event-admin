@@ -4,17 +4,17 @@ import ChannelSelect from './ChannelSelect.vue'
 import { Plus } from '@element-plus/icons-vue'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { artPublishService } from '@api/article'
+import { artPublishService } from '@/api/article.js'
 // 控制抽屉显示隐藏
 const visibleDrawer = ref(false)
 
 // 默认空白数据
 const defaultForm = {
-  title: '', // 标题
-  cate_id: '', // 分类id
-  content: '', // 内容
-  cover_img: '', // 封面
-  state: '' // 状态
+  title: '',
+  cate_id: '',
+  cover_img: '',
+  content: '',
+  state: ''
 }
 
 // 准备数据
@@ -29,6 +29,7 @@ const onselectFile = (uploadFile) => {
   imageUrl.value = URL.createObjectURL(uploadFile.raw)
 }
 
+const editorRef = ref()
 const open = (row) => {
   visibleDrawer.value = true // 显示抽屉
 
@@ -38,6 +39,8 @@ const open = (row) => {
     formModel.value = {
       ...defaultForm
     }
+    imageUrl.value = ''
+    editorRef.value.setHTML('')
     console.log('添加')
   }
 }
@@ -102,6 +105,7 @@ defineExpose({
       <el-form-item label="文章内容" prop="content">
         <div class="editor">
           <quill-editor
+            ref="editorRef"
             theme="snow"
             v-model:content="formModel.content"
             contentType="html"
